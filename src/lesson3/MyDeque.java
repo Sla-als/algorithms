@@ -1,9 +1,9 @@
 package lesson3;
 
-import java.util.Arrays;
+import java.util.EmptyStackException;
 import java.util.NoSuchElementException;
 
-public class MyQueue<T> {
+public class MyDeque<T> {
     private T[] list;
     private int size;
     private int capacity;
@@ -17,7 +17,7 @@ public class MyQueue<T> {
     //8
 
 
-    public MyQueue(int capacity) throws IllegalArgumentException {
+    public MyDeque(int capacity) throws IllegalArgumentException {
         if (capacity <= 0) {
             throw new IllegalArgumentException("capacity: " + capacity);
         }
@@ -25,7 +25,7 @@ public class MyQueue<T> {
         list = (T[]) new Object[capacity];
     }
 
-    public MyQueue() {
+    public MyDeque() {
         this.capacity = DEFAULT_CAPACITY;
         list = (T[]) new Object[capacity];
     }
@@ -36,7 +36,7 @@ public class MyQueue<T> {
      * @param item добавляемый элемент
      * @throws IllegalStateException если очередь полная
      */
-    public void insert(T item) throws IllegalStateException {
+    public void insertLeft(T item) throws IllegalStateException {
         if (isFull()) {
             reCapacity((int) (capacity * 1.5));
             //throw new IllegalStateException("Очередь заполнена");
@@ -46,18 +46,76 @@ public class MyQueue<T> {
         end = nextIndex(end);
     }
 
-    public T peekFront() {
+    public void insertRight(T item) throws IllegalStateException {
+        if (isFull()) {
+            reCapacity((int) (capacity * 1.5));
+            //throw new IllegalStateException("Очередь заполнена");
+        }
+        System.out.println(begin +"|"+end);
+        size++;
+        list[end] = item;
+        System.out.println(begin +"|"+end);
+        //end = previousIndex(end);
+    }
+
+
+//    public void push(T item) {
+//        if (isFull()) {
+//            reCapacity((int) (capacity*1.5));
+//            //throw new StackOverflowError("Стек заполнен");
+//        }
+//        list[size]= item;
+//        size++;
+//    }
+
+//    public T pop(){
+//        T temp = peek();
+//        size--;
+//        list[size]= null;
+//        return temp;
+//    }
+
+//    public T peek(){
+//        if (isEmpty()){
+//            throw new EmptyStackException();
+//        }
+//        return list[size-1];
+//    }
+
+
+
+
+    private int previousIndex(int index) {
+        return (index - 1);
+    }
+
+    public T peekLeft() {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
         return list[begin];
     }
 
-    public T remove() {
-        T temp = peekFront();
+    public T peekRight() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return list[end-1];
+    }
+
+    public T removeLeft() {
+        T temp = peekLeft();
         size--;
         list[begin] = null;
         begin = nextIndex(begin);
+        return temp;
+    }
+
+    public T removeRight() {
+        T temp = peekRight();
+        size--;
+        list[end] = null;
+        end = previousIndex(end);
         return temp;
     }
 

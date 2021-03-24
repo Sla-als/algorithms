@@ -27,10 +27,35 @@ public class Expression {
                 }
             }
         }
-        if(!stack.isEmpty()){
+        if (!stack.isEmpty()) {
             System.out.println("Error: bracket doesn't match");
             return false;
         }
+        return true;
+    }
+
+    public boolean checkBracketToo() {
+
+        MyStack<Character> myStack = new MyStack<>(exp.length());
+
+        for (int i = 0; i < exp.length(); i++) {
+            char ch = exp.charAt(i);
+
+            if (ch == '(' || ch == '{' || ch == '[') {
+                myStack.push(ch);
+            } else if (ch == ')' || ch == '}' || ch == ']') {
+                if (myStack.isEmpty()) {
+                    System.out.println("err emp");
+                    return false;
+                }
+                char top = myStack.pop();
+                if (ch == ')' && top != '(' ||
+                        ch == '}' && top != '{' ||
+                        ch == ']' && top != '[') return false;
+            }
+        }
+        if (!myStack.isEmpty()){return false;}
+
         return true;
     }
 }
