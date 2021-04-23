@@ -44,23 +44,26 @@ public class MyLinkedList<T> implements Iterable<T> {
 
         @Override
         public T previous() {
-            return null;
+          return current.getPrev().getValue();
         }
 
         @Override
         public int nextIndex() {
-            return 0;
+            return size++;
         }
 
         @Override
         public int previousIndex() {
-            return 0;
+            return size--;
         }
 
         //удаляет элемент который прошли методом next или prev
         @Override
         public void remove() {
-
+            current.getNext().setPrev(current.getPrev());
+            current.getPrev().setNext(current.getNext());
+            current.setNext(null);
+            current.setPrev(null);
         }
         //удаляет элементу который прошли методом next или prev
         @Override
